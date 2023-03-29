@@ -1,0 +1,97 @@
+<html xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.springframework.org/schema/data/jaxb"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <title>Register</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+        <style>
+            div {
+                padding: 5px;
+            }
+
+            .navbar {
+                padding: 5px;
+            }
+        </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js">
+        </script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $("#locales").change(function () {
+                    var selectedOption = $('#locales').val();
+                    if (selectedOption != ''){
+                        window.location.replace('?lang=' + selectedOption);
+                    }
+                });
+            });
+        </script>
+    </head>
+        <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-mdb-toggle="collapse"
+                        data-mdb-target="#navbarExample01" aria-controls="navbarExample01" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarExample01">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item active">
+                            <a class="nav-link" aria-current="page" href="/">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <p sec:authorize="isAuthenticated()">Username;<span sec:authorize="isAuthenticated()" th:text="${#authentication.getPrincipal().getUsername()}"></span></p>
+                        </li>
+                        <li class="nav-item">
+                            <a sec:authorize="isAuthenticated()" class="btn btn-lg btn-primary" href="/logout" role="button">Logout &raquo;</a>
+                        </li>
+                        <li class="nav-item">
+                            <span ></span>
+                            <select class="form-select" id="locales">
+                                <option value="" th:text="#{lang.change}"></option>
+                                <option value="en" th:text="#{lang.en}"></option>
+                                <option value="ms" th:text="#{lang.ms}"></option>
+                            </select>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="card mx-auto" style="width: 40%; margin-top: 5%;">
+            <div class="card-body">
+                <form th:action="@{/register}" th:object="${employee}" method="post">
+                    <div class="form-group">
+                        <label th:text="#{first_name}"></label>
+                        <input id="firstName" type="text" th:placeholder="#{first_name}" class="form-control" th:field="*{firstName}">
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('firstName')}" th:text="#{invalid_firstName}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{last_name}"></label>
+                        <input id="lastName" type="text" th:placeholder="#{last_name}" class="form-control" th:field="*{lastName}">
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('lastName')}" th:text="#{invalid_lastName}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{email}"></label>
+                        <input id="email" type="email" th:placeholder="#{email}" class="form-control" th:field="*{email}">
+                        <small class="form-text text-muted" th:text="#{email_subtext}"></small>
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('email')}" th:text="#{invalid_email}"></div>
+                    </div>
+                    <div class="form-group">
+                        <label th:text="#{password}"></label>
+                        <input id="password" type="password" th:placeholder="#{password}" class="form-control" th:field="*{password}">
+                        <div class="alert alert-danger" th:if="${#fields.hasErrors('password')}" th:text="#{invalid_password}"></div>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-success" type="submit" style="width: 100%;" th:text="#{register}"></button>
+                    </div>
+                    <div class="form-group">
+                        <p style="padding: 5px; text-align: center;" th:text="#{login_subtext}"></p>
+                        <a class="btn btn-primary" type="button" href="../login" style="width: 100%;" th:text="#{login}"></a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </body>
+</html>
